@@ -47,14 +47,14 @@ export default function EditMovie(props) {
     title: "",
     director: "",
     metascore: "",
-    stars: "",
+    stars: [],
     id: "",
 })
 
   useEffect(() => {
     axios
     .get(`http://localhost:5000/api/movies/${id}`)
-    .then((res) => setFormState(res.data))
+    .then(res => {setFormState(res.data)})
     .catch((err) => console.log(err.response));
   }, [id])
 
@@ -63,9 +63,15 @@ const inputChange = (e) => {
     setFormState({...formState, [e.target.name]: e.target.value});
 }
 
+const arrayInputChange = (e) => {
+    e.persist();
+    setFormState({...formState, [e.target.name]: [e.target.value]});
+}
+
 
 let history = useHistory();
 
+console.log("Edit Movie Form Axios Formstate", formState)
 
 const submitForm = (e) => {
     e.preventDefault();
@@ -137,7 +143,7 @@ const submitForm = (e) => {
                  name="stars"
                  label="Stars" 
                  value={formState.stars}
-                 onChange={inputChange}
+                 onChange={arrayInputChange}
                  variant="filled" 
                  type="text" 
                  required={true}
